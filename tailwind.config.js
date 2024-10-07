@@ -7,7 +7,12 @@ export default {
     './src/**/*.{ts,tsx}',
   ],
   theme: {
-    colors: {},
+    colors: {
+      white: '#ffffff',
+      black: '#000000',
+      transparent: 'transparent',
+      current: 'currentColor',
+    },
     extend: {
       borderRadius: {
         lg: 'var(--radius)',
