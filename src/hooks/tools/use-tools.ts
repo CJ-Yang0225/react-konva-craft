@@ -63,15 +63,8 @@ export const useTools = (
 ): UseToolsReturnValue => {
   const activeTool = useAtomValue(activeToolAtom);
   const selectedShapesMap = useAtomValue(selectedShapesMapAtom);
-  // const setShapes = useSetAtom(shapesAtom);
-  // const pencilThickness = useAtomValue(pencilThicknessAtom);
-  // const color = useAtomValue(colorAtom);
-
-  // const _rgb = Konva.Util.getRGB(color);
 
   const commonStatusRef = useRef<CommonStatus>(DEFAULT_COMMON_STATUS);
-
-  // const commonStatus = commonStatusRef.current;
 
   const reset = useCallback(() => {
     commonStatusRef.current = { ...DEFAULT_COMMON_STATUS };
