@@ -61,24 +61,25 @@ export type UseToolsReturnValue = {
 export const useTools = (
   previewLayerRef: React.RefObject<Konva.Layer>
 ): UseToolsReturnValue => {
-  const activeTool = useAtomValue(activeToolAtom);
-  const selectedShapesMap = useAtomValue(selectedShapesMapAtom);
+  const activeTool = useAtomValue(activeToolAtom); // 目前選中的工具
+  const selectedShapesMap = useAtomValue(selectedShapesMapAtom); // 被選取的圖形 map
 
   const commonStatusRef = useRef<CommonStatus>(DEFAULT_COMMON_STATUS);
 
+  // 重設工具相關狀態與清空 previewLayer
   const reset = useCallback(() => {
     commonStatusRef.current = { ...DEFAULT_COMMON_STATUS };
 
     previewLayerRef.current?.destroyChildren();
-    previewLayerRef.current?.clear();
   }, [previewLayerRef]);
 
   const baseToolProps = {
-    previewLayerRef,
-    commonStatusRef,
-    reset,
+    previewLayerRef, // 預覽圖層
+    commonStatusRef, // 共用狀態
+    reset, // 重設函式
   };
 
+  // 工具的事件處理函式（onMouseDown、onMouseMove、onMouseUp、onClick）
   const pencilToolHandlers = usePencilTool(baseToolProps);
   const shapingToolHandlers = useShapingTool(baseToolProps);
   const transformerHandlers = useTransformer(baseToolProps);
@@ -88,6 +89,7 @@ export const useTools = (
     reset();
   }, [activeTool, reset]);
 
+  // 根據選中的工具取得對應的事件處理函式
   const getHandlersByTool = (): UseToolsReturnValue => {
     switch (activeTool) {
       case Tool.TRANSFORMER:
@@ -104,7 +106,10 @@ export const useTools = (
 
   const { onMouseDown, onMouseMove, onMouseUp, onClick } = getHandlersByTool();
 
-  const onRegularMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
+  /**
+   * 滑鼠按下時的預設邏輯
+   */
+  const handleMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
     const target = e.target;
     const stage = e.target.getStage();
 
@@ -114,23 +119,11 @@ export const useTools = (
     onMouseDown?.(e);
   };
 
-  const onRegularMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    onMouseMove?.(e);
-  };
-
-  const onRegularMouseUp = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    onMouseUp?.(e);
-  };
-
-  const onRegularClick = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    onClick?.(e);
-  };
-
   return {
-    onMouseDown: onRegularMouseDown,
-    onMouseMove: onRegularMouseMove,
-    onMouseUp: onRegularMouseUp,
-    onClick: onRegularClick,
+    onMouseDown: handleMouseDown,
+    onMouseMove,
+    onMouseUp,
+    onClick,
   };
 };
 
