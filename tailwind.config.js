@@ -64,6 +64,10 @@ export default {
           5: 'hsl(var(--chart-5))',
         },
       },
+      zIndex: {
+        panel: '49',
+        dialog: '99',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],
