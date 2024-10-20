@@ -7,7 +7,7 @@ import { Tool } from '@/types/konva';
 
 import { usePencilTool } from './use-pencil-tool';
 import { useShapingTool } from './use-shaping-tool';
-import { useTransformer } from './use-transformer';
+import { useTransformerTool } from './use-transformer-tool';
 
 type MouseInfo = {
   x1: number;
@@ -82,7 +82,7 @@ export const useTools = (
   // 工具的事件處理函式（onMouseDown、onMouseMove、onMouseUp、onClick）
   const pencilToolHandlers = usePencilTool(baseToolProps);
   const shapingToolHandlers = useShapingTool(baseToolProps);
-  const transformerHandlers = useTransformer(baseToolProps);
+  const transformerToolHandlers = useTransformerTool(baseToolProps);
 
   // 切換工具時，重置狀態、預覽層
   useEffect(() => {
@@ -93,7 +93,7 @@ export const useTools = (
   const getHandlersByTool = (): UseToolsReturnValue => {
     switch (activeTool) {
       case Tool.TRANSFORMER:
-        return transformerHandlers;
+        return transformerToolHandlers;
       case Tool.PENCIL:
         return pencilToolHandlers;
       case Tool.SHAPING_RECTANGLE:
