@@ -14,7 +14,7 @@ export const ControlPanel = () => {
   return (
     <div
       id="control-panel"
-      className="nes-container h-full w-[280px] shrink-0 px-6"
+      className="nes-container flex h-full w-[280px] shrink-0 flex-col justify-between px-6"
     >
       <div className="grid grid-cols-3 gap-x-0.5">
         {TOOL_BUTTONS.map((props) => {
@@ -41,6 +41,13 @@ export const ControlPanel = () => {
             />
           );
         })}
+      </div>
+      <div className="flex justify-end">
+        <a
+          className="nes-icon github is-large"
+          href="https://github.com/CJ-Yang0225/react-konva-craft"
+          target="_blank"
+        ></a>
       </div>
     </div>
   );
