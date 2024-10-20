@@ -50,6 +50,8 @@ export default ts.config(
           ignoreRestSiblings: true,
         },
       ],
+      '@typescript-eslint/no-empty-object-type': 'off',
+      'react-refresh/only-export-components': 'off',
     },
   }
 );
