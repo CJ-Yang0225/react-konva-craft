@@ -13,6 +13,9 @@ export default {
       transparent: 'transparent',
       current: 'currentColor',
     },
+    fontFamily: {
+      zpix: ['Zpix', 'sans-serif'],
+    },
     extend: {
       borderRadius: {
         lg: 'var(--radius)',
