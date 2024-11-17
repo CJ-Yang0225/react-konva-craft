@@ -101,6 +101,8 @@ export const useTools = (
       if (e.repeat) return;
 
       if (e.key === ' ') {
+        e.preventDefault();
+
         setActiveTool(Tool.HAND);
         if (activeTool !== Tool.HAND) {
           previousActiveToolRef.current = activeTool;
@@ -111,6 +113,8 @@ export const useTools = (
 
     const handleKeyUp = (e: KeyboardEvent) => {
       if (e.key === ' ') {
+        e.preventDefault();
+
         setActiveTool(previousActiveToolRef.current || Tool.HAND);
       }
     };
