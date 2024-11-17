@@ -7,15 +7,15 @@ import {
 } from '@/stores/canvasStore';
 import { useAtom, useAtomValue } from 'jotai';
 import Konva from 'konva';
-import { Grab, Hand } from 'lucide-react';
+import { Grab } from 'lucide-react';
 import { Layer, Rect, Stage } from 'react-konva';
 
 import { Tool } from '@/types/konva';
+import { useToolCursor } from '@/hooks/tools/use-tool-cursor';
 import { useTools } from '@/hooks/tools/use-tools';
+import { AppCursor } from '@/components/molecules/app-cursor';
 import { KonvaShapes } from '@/components/organisms/konva-shapes';
 import { KonvaTransformer } from '@/components/organisms/konva-transformer';
-
-import { AppCursor } from '../molecules/app-cursor';
 
 export const KonvaCanvas = () => {
   const activeTool = useAtomValue(activeToolAtom);
@@ -25,10 +25,15 @@ export const KonvaCanvas = () => {
 
   const constraintBoxRef = useRef<HTMLDivElement>(null);
 
+  const shapeLayerRef = useRef<Konva.Layer>(null);
   const previewLayerRef = useRef<Konva.Layer>(null);
 
-  const { onMouseDown, onMouseMove, onMouseUp, onClick } =
-    useTools(previewLayerRef);
+  const { onMouseDown, onMouseMove, onMouseUp, onClick } = useTools(
+    shapeLayerRef,
+    previewLayerRef
+  );
+
+  const previousCursorRef = useToolCursor(activeTool);
 
   /**
    * 根據容器調整畫布（Stage）大小
@@ -60,7 +65,7 @@ export const KonvaCanvas = () => {
   return (
     <div
       id="konva-canvas-constraint-box"
-      className="dark h-full grow bg-background"
+      className="dark h-full grow bg-[#3a3a3a]"
       ref={constraintBoxRef}
     >
       <Stage
@@ -68,6 +73,7 @@ export const KonvaCanvas = () => {
         width={stageWidth}
         height={stageHeight}
         draggable={activeTool === Tool.HAND}
+        listening={activeTool !== Tool.HAND}
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
@@ -75,16 +81,12 @@ export const KonvaCanvas = () => {
         onDragStart={() => {
           setCursor({
             element: <Grab size={32} fill="white" />,
-            x: 0,
-            y: 0,
+            x: 16,
+            y: 16,
           });
         }}
         onDragEnd={() => {
-          setCursor({
-            element: <Hand size={32} fill="white" />,
-            x: 0,
-            y: 0,
-          });
+          setCursor(previousCursorRef.current);
         }}
       >
         <Layer id="background-layer">
@@ -98,7 +100,7 @@ export const KonvaCanvas = () => {
             listening={false}
           />
         </Layer>
-        <Layer id="shapes-layer">
+        <Layer id="shapes-layer" ref={shapeLayerRef}>
           <KonvaShapes />
           <KonvaTransformer />
         </Layer>
