@@ -1,6 +1,5 @@
 import { activeToolAtom } from '@/stores/canvasStore';
 import { useAtom } from 'jotai';
-import { MousePointer2, Pencil, Plus } from 'lucide-react';
 
 import { Tool } from '@/types/konva';
 import {
@@ -58,51 +57,26 @@ const TOOL_BUTTONS: AppToolButtonProps[] = [
     id: Tool.TRANSFORMER,
     icon: 'mouse-pointer-2',
     label: 'Transformer',
-    cursor: {
-      element: <MousePointer2 size={32} fill="white" />,
-      x: 4,
-      y: 4,
-    },
   },
   {
     id: Tool.PENCIL,
     icon: 'pencil',
     label: 'Pencil',
-    cursor: {
-      element: <Pencil size={32} fill="white" />,
-      x: 0,
-      y: 32,
-    },
   },
   {
     id: Tool.SHAPING_RECTANGLE,
     icon: 'square',
     label: 'Rectangle',
-    cursor: {
-      element: <Plus size={36} />,
-      x: 12,
-      y: 12,
-    },
     tools: [
       {
         id: Tool.SHAPING_RECTANGLE,
         icon: 'square',
         label: 'Rectangle',
-        cursor: {
-          element: <Plus size={36} />,
-          x: 12,
-          y: 12,
-        },
       },
       {
         id: Tool.SHAPING_ELLIPSE,
         icon: 'circle',
         label: 'Ellipse',
-        cursor: {
-          element: <Plus size={36} />,
-          x: 12,
-          y: 12,
-        },
       },
     ],
   },

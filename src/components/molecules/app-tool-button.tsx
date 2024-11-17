@@ -1,7 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
-import { cursorAtom } from '@/stores/canvasStore';
+import { FC, useEffect, useState } from 'react';
 import { PopoverContentProps } from '@radix-ui/react-popover';
-import { useSetAtom } from 'jotai';
 
 import { Tool } from '@/types/konva';
 import { cn } from '@/lib/utils';
@@ -29,11 +27,6 @@ export interface AppToolButtonProps {
   onToolChange?: (newTool: Tool) => void;
   expanded?: boolean;
   popoverContentProps?: PopoverContentProps;
-  cursor?: {
-    element: React.ReactElement;
-    x?: number;
-    y?: number;
-  };
 }
 
 export const AppToolButton: FC<AppToolButtonProps> = ({
@@ -48,9 +41,7 @@ export const AppToolButton: FC<AppToolButtonProps> = ({
   onToolChange,
   expanded = false,
   popoverContentProps,
-  cursor,
 }) => {
-  const setCursor = useSetAtom(cursorAtom);
   const [state, setState] = useState<ToolState>({
     id,
     icon,
@@ -74,16 +65,6 @@ export const AppToolButton: FC<AppToolButtonProps> = ({
     );
   }, [disabled]);
 
-  const toggleCursor = (cursor: AppToolButtonProps['cursor']) => {
-    setCursor((prevCursor) => {
-      if (prevCursor?.element === cursor?.element) {
-        return undefined;
-      } else {
-        return cursor;
-      }
-    });
-  };
-
   return (
     <Popover defaultOpen={expanded}>
       <PopoverTrigger asChild>
@@ -100,7 +81,6 @@ export const AppToolButton: FC<AppToolButtonProps> = ({
           disabled={disabled}
           onClick={() => {
             if (isExpandable) return;
-            toggleCursor(cursor);
             onClick?.(state.id);
           }}
         >
@@ -157,7 +137,6 @@ export const AppToolButton: FC<AppToolButtonProps> = ({
                         id,
                         icon,
                       }));
-                      setCursor(cursor);
                       onToolChange?.(id);
                     }}
                   />
