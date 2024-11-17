@@ -46,6 +46,7 @@ const DEFAULT_COMMON_STATUS: CommonStatus = {
 export type SharedArgs = [React.RefObject<Konva.Layer>, CommonStatus];
 
 export type BaseToolProps = {
+  shapeLayerRef: React.RefObject<Konva.Layer>;
   previewLayerRef: React.RefObject<Konva.Layer>;
   commonStatusRef: React.MutableRefObject<CommonStatus>;
   reset: () => void;
@@ -59,6 +60,7 @@ export type UseToolsReturnValue = {
 };
 
 export const useTools = (
+  shapeLayerRef: React.RefObject<Konva.Layer>,
   previewLayerRef: React.RefObject<Konva.Layer>
 ): UseToolsReturnValue => {
   const activeTool = useAtomValue(activeToolAtom); // 目前選中的工具
@@ -74,6 +76,7 @@ export const useTools = (
   }, [previewLayerRef]);
 
   const baseToolProps = {
+    shapeLayerRef, // shapes 圖層
     previewLayerRef, // 預覽圖層
     commonStatusRef, // 共用狀態
     reset, // 重設函式
