@@ -52,5 +52,5 @@ export const KonvaTransformer = () => {
     };
   }, []);
 
-  return <Transformer ref={transformerRef} />;
+  return <Transformer ref={transformerRef} shouldOverdrawWholeArea />;
 };

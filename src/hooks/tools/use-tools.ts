@@ -148,8 +148,15 @@ export const useTools = (
     const target = e.target;
     const stage = e.target.getStage();
 
-    // 如果點擊非 Stage 上而且目標為被選取狀態，忽略工具預設功能，啟用 Shape 的 draggable 功能
-    if (target !== stage && selectedShapesMap.has(target.id())) return;
+    // 是否是 Transformer 填充的 shape（shouldOverdrawWholeArea 啟用）
+    const isTransformerFilledShape = target.getAttr('name') === 'back';
+
+    // 如果點擊 Transformer 填充的 shape 或非 Stage 上而且目標為被選取狀態，忽略工具預設功能，啟用 Shape 的 draggable 功能
+    if (
+      isTransformerFilledShape ||
+      (target !== stage && selectedShapesMap.has(target.id()))
+    )
+      return;
 
     onMouseDown?.(e);
   };

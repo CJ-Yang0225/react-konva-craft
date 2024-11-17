@@ -1,6 +1,6 @@
 import {
   selectedShapesMapAtom,
-selectMultipleShapes,
+  selectMultipleShapes,
   selectShape,
   unselectShape,
 } from '@/stores/canvasStore';
@@ -139,7 +139,34 @@ export const useTransformerTool = ({
     const isShiftKeyPressed = e.evt.shiftKey;
     const isMultiSelectMode = isCtrlOrMetaKeyPressed || isShiftKeyPressed;
 
-    const id = target.id(); // 取得點擊圖形的 ID
+    // 如果是 Transformer 填充的 shape（shouldOverdrawWholeArea 啟用）
+    const isTransformerFilledShape = target.getAttr('name') === 'back';
+
+    let id: string | undefined;
+
+    if (isTransformerFilledShape) {
+      const position = stage?.getRelativePointerPosition();
+
+      if (position) {
+        id = shapeLayer
+          ?.find('.shape')
+          ?.find((shape) => {
+            const shapeBoundingBox = shape.getClientRect();
+
+            return Konva.Util.haveIntersection(shapeBoundingBox, {
+              x: position.x,
+              y: position.y,
+              width: 0,
+              height: 0,
+            });
+          })
+          ?.id();
+      }
+    } else {
+      id = target.id();
+    }
+
+    if (!id) return;
 
     // 已經被選取且按住 Ctrl 或 Meta 鍵，就取消選取
     if (selectedShapeMap.has(id)) {
