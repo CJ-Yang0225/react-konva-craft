@@ -32,6 +32,7 @@ export const KonvaShapes = React.memo(() => {
   const renderShapes = () => {
     return shapes.map((shape) => {
       const baseConfig: Konva.ShapeConfig | KonvaNodeEvents = {
+        name: 'shape',
         draggable: selectedShapesMap.has(shape.id),
         onDragEnd,
       };
