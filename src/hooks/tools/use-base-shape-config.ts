@@ -20,6 +20,7 @@ export const useBaseShapeConfig = () => {
     const sharedConfig = {
       id,
       type: shapeType,
+      draggable: false,
     } as Extract<Shape, { type: T }>;
 
     switch (shapeType) {

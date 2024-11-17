@@ -76,6 +76,7 @@ export interface BaseShape extends Coordinate, BaseStyle {
   rotation?: number;
   scale?: { x: number; y: number };
   visible?: boolean;
+  draggable?: boolean;
 }
 
 /**
