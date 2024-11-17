@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { activeToolAtom, selectedShapesMapAtom } from '@/stores/canvasStore';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import Konva from 'konva';
 
 import { Tool } from '@/types/konva';
@@ -63,8 +63,9 @@ export const useTools = (
   shapeLayerRef: React.RefObject<Konva.Layer>,
   previewLayerRef: React.RefObject<Konva.Layer>
 ): UseToolsReturnValue => {
-  const activeTool = useAtomValue(activeToolAtom); // 目前選中的工具
+  const [activeTool, setActiveTool] = useAtom(activeToolAtom); // 目前選中的工具
   const selectedShapesMap = useAtomValue(selectedShapesMapAtom); // 被選取的圖形 map
+  const previousActiveToolRef = useRef<Tool | null>(null);
 
   const commonStatusRef = useRef<CommonStatus>(DEFAULT_COMMON_STATUS);
 
@@ -89,8 +90,39 @@ export const useTools = (
 
   // 切換工具時，重置狀態、預覽層
   useEffect(() => {
+    if (activeTool === Tool.HAND) return;
+
     reset();
   }, [activeTool, reset]);
+
+  // 按下空白鍵時，切換成拖曳 Stage 模式，並在返回時回到上一次所選工具
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.repeat) return;
+
+      if (e.key === ' ') {
+        setActiveTool(Tool.HAND);
+        if (activeTool !== Tool.HAND) {
+          previousActiveToolRef.current = activeTool;
+          return Tool.HAND;
+        }
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === ' ') {
+        setActiveTool(previousActiveToolRef.current || Tool.HAND);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [activeTool, setActiveTool]);
 
   // 根據選中的工具取得對應的事件處理函式
   const getHandlersByTool = (): UseToolsReturnValue => {
