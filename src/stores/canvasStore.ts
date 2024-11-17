@@ -104,6 +104,17 @@ export const unselectShape = (id: string) => {
 };
 
 /**
+ * 取消選取所有 shape(s)
+ */
+export const unselectAllShapes = () => {
+  setSelectedShapesMap((prevSelectedShapeMap) => {
+    if (prevSelectedShapeMap.size === 0) return prevSelectedShapeMap; // 減少不必要的 re-render
+
+    return new Map();
+  });
+};
+
+/**
  * 選取多個 shapes
  */
 export const selectMultipleShapes = (ids: string[]) => {
