@@ -20,28 +20,26 @@ type MouseInfo = {
   height: number;
 };
 
-const DEFAULT_MOUSE_INFO: MouseInfo = {
-  x1: 0,
-  y1: 0,
-  x2: 0,
-  y2: 0,
-  cx: 0,
-  cy: 0,
-  width: 0,
-  height: 0,
-};
-
 export type CommonStatus = {
   isMouseDown: boolean;
   konvaShape: Konva.Shape | null;
   mouseInfo: MouseInfo;
 };
 
-const DEFAULT_COMMON_STATUS: CommonStatus = {
+const getDefaultCommonStatus = (): CommonStatus => ({
   isMouseDown: false,
   konvaShape: null,
-  mouseInfo: DEFAULT_MOUSE_INFO,
-};
+  mouseInfo: {
+    x1: 0,
+    y1: 0,
+    x2: 0,
+    y2: 0,
+    cx: 0,
+    cy: 0,
+    width: 0,
+    height: 0,
+  },
+});
 
 export type SharedArgs = [React.RefObject<Konva.Layer>, CommonStatus];
 
@@ -67,11 +65,11 @@ export const useTools = (
   const selectedShapesMap = useAtomValue(selectedShapesMapAtom); // 被選取的圖形 map
   const previousActiveToolRef = useRef<Tool | null>(null);
 
-  const commonStatusRef = useRef<CommonStatus>(DEFAULT_COMMON_STATUS);
+  const commonStatusRef = useRef<CommonStatus>(getDefaultCommonStatus());
 
   // 重設工具相關狀態與清空 previewLayer
   const reset = useCallback(() => {
-    commonStatusRef.current = { ...DEFAULT_COMMON_STATUS };
+    commonStatusRef.current = getDefaultCommonStatus();
 
     previewLayerRef.current?.destroyChildren();
   }, [previewLayerRef]);
